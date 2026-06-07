@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>diro2000 BOT</title>
+  <meta name="theme-color" content="#111827" />
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    :root{
+      --bg:#f4f5f7;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;
+      --dark:#111827;--green:#25D366;--radius:20px;--shadow:0 8px 22px rgba(17,24,39,.07)
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+    body{min-height:100vh;padding-bottom:92px}
+    header{position:sticky;top:0;z-index:50;background:linear-gradient(135deg,#111827,#1f2937);color:#fff;padding:18px 16px 16px}
+    .brandBox{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:7px}
+    .botImg{width:54px;height:54px;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.22))}
+    .brand{font-size:24px;font-weight:950;letter-spacing:-.04em;line-height:1}
+    .sub{font-size:13px;color:#d1d5db}
+    main{padding:14px;max-width:560px;margin:0 auto}.screen{display:none}.screen.active{display:block}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin-bottom:12px;box-shadow:var(--shadow)}
+    h2{font-size:18px;margin:0 0 8px}p{margin:0;color:var(--muted);line-height:1.45;font-size:14px}.section-title{font-size:13px;font-weight:950;color:#374151;margin:15px 2px 8px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .btn{border:0;border-radius:18px;padding:15px 14px;font-size:15px;font-weight:950;cursor:pointer;background:linear-gradient(180deg,#1f2937,#111827);color:#fff;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 7px 0 rgba(0,0,0,.18),0 14px 24px rgba(17,24,39,.12);transition:.08s}
+    .btn:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.18),0 8px 16px rgba(17,24,39,.10)}
+    .btn.wa{background:linear-gradient(180deg,#35e879,#25D366);color:#063b1d}.btn.light{background:linear-gradient(180deg,#f3f6ff,#e9eeff);color:#3730a3}.btn.soft{background:linear-gradient(180deg,#fff,#f3f4f6);color:#111827}.btn.red{background:linear-gradient(180deg,#fff1f2,#fee2e2);color:#991b1b}.btn.orange{background:linear-gradient(180deg,#fff7ed,#fef3c7);color:#92400e}.btn.small{padding:12px 10px;font-size:13px;border-radius:15px}.btn.big{min-height:78px;flex-direction:column}.btn.big span{font-size:26px}
+    .row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.field{margin-bottom:11px}label{display:block;font-size:12px;color:var(--muted);font-weight:850;margin-bottom:5px}
+    input,textarea{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px;font-size:15px;color:var(--text);font-family:inherit}
+    textarea{min-height:150px;resize:vertical;line-height:1.45}.hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+    .output{white-space:pre-wrap;background:#dcf8c6;border:1px solid rgba(37,211,102,.25);border-radius:16px;padding:13px;line-height:1.55;font-size:14px;margin-top:10px;text-align:right}
+    .priceBox{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .price{background:#f8fafc;border:1px solid #dbe1ea;border-radius:20px;padding:16px 10px;text-align:center;min-height:88px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+    .price .amount{font-size:24px;font-weight:950;letter-spacing:-.04em;color:#071327;line-height:1.05}
+    .price .range{font-size:13px;color:#697386;margin-top:8px}.price .editPrice{position:absolute;top:8px;left:8px;border:0;background:#fff;border:1px solid var(--line);width:26px;height:26px;border-radius:999px;font-size:13px;cursor:pointer;box-shadow:0 2px 8px rgba(17,24,39,.06)}
+    .price.special .amount{font-size:20px}.price input{display:none}
+    .template-list,.event-list{display:grid;gap:9px}.template-item,.event-item{border:1px solid var(--line);border-radius:17px;padding:13px;background:#fff;box-shadow:var(--shadow)}
+    .template-item{cursor:pointer;display:flex;gap:12px;align-items:center}.template-item .ico{font-size:24px;width:34px;text-align:center}.template-item b,.event-item b{display:block;font-size:15px;margin-bottom:4px}.template-item span,.event-item span{font-size:12px;color:var(--muted)}
+    .event-alert{background:#fff7ed;border-color:#fed7aa}.empty{padding:12px;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:14px}
+    nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:560px;height:78px;background:#fff;border:1px solid var(--line);border-bottom:0;display:grid;grid-template-columns:repeat(4,1fr);z-index:80;box-shadow:0 -8px 24px rgba(17,24,39,.08);border-radius:22px 22px 0 0;overflow:hidden}
+    nav button{border:0;background:#fff;color:#6b7280;font-size:11px;font-weight:850;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}nav button span{font-size:20px}nav button.active{color:#111827;background:#f9fafb}
+    .toast{position:fixed;bottom:98px;left:50%;transform:translateX(-50%);background:#111827;color:white;padding:12px 16px;border-radius:999px;font-weight:850;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:120;white-space:nowrap}.toast.show{opacity:1;bottom:108px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="brandBox">
+    <img class="botImg" src="bot.svg" alt="bot">
+    <div class="brand">diro2000 BOT</div>
+    <div class="sub">יומן · קיצורים · הצעות מחיר</div>
+  </div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="section-title">יומן השבוע</div>
+  <div class="card">
+    <h2>אירועים לשבוע הקרוב</h2>
+    <p>לאחר חיבור Apps Script בהגדרות, כאן יוצגו אירועי השבוע מיומן Google הפרטי.</p>
+    <div class="row" style="margin-top:12px">
+      <button class="btn wa" onclick="loadCalendarEvents()">רענן יומן</button>
+      <button class="btn soft" onclick="openCalendar()">פתח Google Calendar</button>
+    </div>
+  </div>
+  <div id="calendarAlerts"></div>
+  <div id="weekEvents"></div>
+
+  <div class="section-title">קיצורים להעתקה</div>
+  <div class="card">
+    <div class="row"><button class="btn small wa" onclick="copyQuick('onepager')">עמוד מידע</button><button class="btn small light" onclick="copyQuick('details')">השלמת פרטים</button></div>
+    <div class="row" style="margin-top:8px"><button class="btn small red" onclick="copyQuick('notAvailable')">לא פנוי</button><button class="btn small soft" onclick="copyQuick('gallery')">גלריה</button></div>
+  </div>
+
+  <div class="grid">
+    <button class="btn big light" onclick="openScreen('templates')"><span>💬</span>הודעות מוכנות מראש</button>
+    <button class="btn big wa" onclick="openScreen('proposal')"><span>📄</span>הצעת מחיר חדשה</button>
+  </div>
+
+  <div class="section-title">מחירון מהיר</div>
+  <div class="card">
+    <div class="priceBox">
+      <div class="price" onclick="editPrice('price300','מחיר עד 300 מוזמנים')"><button class="editPrice">✎</button><div class="amount" id="price_300_display">₪2,100</div><div class="range">עד 300</div><input id="home_price_300" inputmode="numeric" /></div>
+      <div class="price" onclick="editPrice('price450','מחיר 300–450 מוזמנים')"><button class="editPrice">✎</button><div class="amount" id="price_450_display">₪2,200</div><div class="range">300–450</div><input id="home_price_450" inputmode="numeric" /></div>
+      <div class="price special" onclick="editPrice('priceSpecial','מחיר חריג')"><button class="editPrice">✎</button><div class="amount" id="price_special_display">מחיר חריג</div><div class="range">אזור/כמות חריגה</div><input id="home_price_special" /></div>
+    </div>
+    <div class="hint">לחיצה על כרטיס מחיר מאפשרת שינוי. השינוי נשמר במכשיר.</div>
+  </div>
+</section>
+
+<section id="proposal" class="screen">
+  <div class="card"><h2>הצעת מחיר חדשה</h2><p>כפתור “צור והעתק” יוצר את ההודעה וגם מעתיק אותה אוטומטית.</p></div>
+  <div class="card">
+    <div class="field"><label>שמות בעלי האירוע</label><input id="p_names" placeholder="דניאל ושיר"></div>
+    <div class="field"><label>תאריך</label><div class="row"><input id="p_date" placeholder="25/10/2026"><input id="p_date_picker" type="date" onchange="syncDatePicker()"></div></div>
+    <div class="field"><label>אולם / מיקום</label><input id="p_venue" placeholder="טרויה אשדוד"></div>
+    <div class="field"><label>כמות מוזמנים</label><input id="p_guests" inputmode="numeric" placeholder="350" oninput="updatePrice()"><div class="hint" id="priceHint">המחיר יופיע לאחר הזנת כמות.</div></div>
+    <div class="field"><label>מחיר</label><input id="p_price" placeholder="מחושב אוטומטית, לפי מחיר לכמות מוזמנים. ניתן לערוך"></div>
+    <div class="field"><label>שעת התחלה</label><input id="p_start_time" type="time" value="19:00"></div>
+    <div class="field"><label>שעת סיום</label><input id="p_end_time" type="time" value="00:00"></div>
+    <button class="btn wa" onclick="buildProposal(true)">צור הודעה והעתק</button>
+    <div id="proposalOutput"></div>
+  </div>
+</section>
+
+<section id="templates" class="screen">
+  <div class="card"><h2>הודעות מוכנות מראש</h2><p>אפשר לערוך ולשמור. השינויים נשמרים במכשיר הזה דרך localStorage.</p></div>
+  <div class="template-list" id="templateList"></div>
+  <div class="card" id="templateEditor" style="display:none"><h2 id="templateTitle"></h2><textarea id="templateText"></textarea><div class="row"><button class="btn wa" onclick="copyFrom('templateText')">העתק</button><button class="btn soft" onclick="saveEditedTemplate()">שמור שינוי</button></div><div class="hint">נשמר רק במכשיר/דפדפן שבו ערכת.</div></div>
+</section>
+
+<section id="settings" class="screen">
+  <div class="card"><h2>הגדרות</h2><p>קישורים, מחירים וחיבור יומן. נשמרים במכשיר.</p></div>
+  <div class="card">
+    <div class="field"><label>קישור Apps Script ליומן</label><input id="s_calendar_api" placeholder="Web App URL של Code.gs_calendar"></div>
+    <div class="field"><label>Google Calendar לפתיחה מהירה</label><input id="s_calendar_link" placeholder="https://calendar.google.com/..."></div>
+    <div class="field"><label>כמה ימים לפני אירוע לשלוח מסגרות</label><input id="s_frames_days" inputmode="numeric" value="4"></div>
+    <div class="field"><label>קישור עמוד מידע ללקוח</label><input id="s_examples"></div>
+    <div class="field"><label>קישור עמוד מידע נוסף</label><input id="s_reviews"></div>
+    <div class="field"><label>קישור עמוד מידע / מסגרות</label><input id="s_frames"></div>
+    <div class="field"><label>שם העסק / חתימה</label><input id="s_business"></div>
+    <button class="btn wa" onclick="saveSettings()">שמור הגדרות</button>
+    <button class="btn soft" style="margin-top:8px" onclick="installHelp()">איך לשמור כאפליקציה?</button>
+  </div>
+</section>
+</main>
+
+<nav>
+  <button class="active" onclick="openScreen('home', this)"><span>🏠</span>בית</button>
+  <button onclick="openScreen('proposal', this)"><span>📄</span>הצעה</button>
+  <button onclick="openScreen('templates', this)"><span>💬</span>הודעות</button>
+  <button onclick="openScreen('settings', this)"><span>⚙️</span>הגדרות</button>
+</nav>
+<div class="toast" id="toast">הועתק</div>
+
+<script>
+const DEFAULT_SETTINGS={examplesLink:"https://tzviky.github.io/diro2000/onepager/index.html",reviewsLink:"https://tzviky.github.io/diro2000/onepager/index.html",framesLink:"https://tzviky.github.io/diro2000/onepager/index.html",businessName:"לכל שאלה נוספת אני זמין 🙏🏻",price300:"2100",price450:"2200",priceSpecial:"",calendarLink:"https://calendar.google.com/calendar/u/0/r",calendarApiUrl:"",framesDaysBefore:"4"};
+const DEFAULT_TEMPLATES={
+details:{icon:"🧾",title:"השלמת פרטים",desc:"כשחסר תאריך / אולם / כמות / שמות",text:`היי, תודה שפניתם 🙏
+כדי שאוכל לבדוק זמינות ולשלוח הצעת מחיר מסודרת, אשמח לקבל:
+
+➖ תאריך האירוע
+➖ שם האולם / העיר
+➖ כמות מוזמנים משוערת
+➖ שמות בעלי האירוע`},
+onepager:{icon:"🔗",title:"שליחת עמוד מידע",desc:"במקום קישורי דרייב והסברים ארוכים",text:`היי, תודה שפניתם 🙏
+
+מצרף לכם עמוד מסודר עם כל הפרטים על צילום המגנטים:
+
+➖ מה כוללת החבילה
+➖ דוגמאות לעבודות
+➖ ביקורות מלקוחות
+➖ מילוי פרטים לבדיקת זמינות
+
+https://tzviky.github.io/diro2000/onepager/index.html
+
+בסוף העמוד אפשר למלא את פרטי האירוע ולקבל הודעת וואטסאפ מוכנה לשליחה 🙏`},
+notAvailable:{icon:"🚫",title:"לא פנוי",desc:"כשהתאריך תפוס",text:`היי, תודה רבה שפניתם 🙏
+לצערי בתאריך הזה אני כבר תפוס.
+
+מאחל לכם אירוע שמח ומרגש,
+ונתראה בשמחות 🙏`},
+followup:{icon:"🔁",title:"פולואפ",desc:"ללקוח שקיבל הצעה ולא חזר",text:`היי, עושה פולואפ קטן 🙏
+רציתי לבדוק אם תרצו שאשמור לכם את התאריך או שיש שאלות נוספות לגבי ההצעה.`},
+frames:{icon:"🖼️",title:"בחירת מסגרות",desc:"3–4 ימים לפני האירוע",text:`היי מה קורה 🙏
+
+מצרף לכם כאן קישור לבחירת מסגרות למגנטים:
+{{framesLink}}
+
+אחרי שתבחרו מסגרת, נכין לכם סקיצה עם השמות והתאריך ונשלח לאישור לפני האירוע 🙏
+
+אשמח שתשלחו לי גם את המלל המדויק שתרצו שיופיע על המגנט:
+שמות + תאריך / משפט נוסף אם יש.`},
+gallery:{icon:"📷",title:"שליחת גלריה",desc:"אחרי האירוע",text:`📷 *האלבום מהאירוע מחכה לכם*
+
+כל התמונות זמינות עכשיו לצפייה ולהורדה בצורה פשוטה ונוחה ❤️
+
+{{galleryLink}}
+
+שימו לב — הקישור פעיל למשך חודשיים בלבד 🙏🏻
+
+מומלץ להוריד את התמונות ולשמור גיבוי מסודר במחשב, בענן או בכונן קשיח.
+הכי מומלץ בענן.
+
+אפשר להעביר את הקישור למשפחה ולחברים 😊
+
+והכי חשוב — לא חייבים להוריד את כל האלבום.
+כל אחד יכול לבחור רק את התמונות שהוא רוצה ולהוריד אותן בקלות ✨📸`},
+locationCheck:{icon:"📍",title:"מיקום לבדיקה",desc:"כשהאירוע צפונית להרצליה",text:`תודה על הפרטים 🙏
+אני בודק רגע זמינות והתאמה מבחינת מיקום האירוע, ואחזור אליכם עם תשובה מסודרת.`}
+};
+let settings=mergeDefaults(DEFAULT_SETTINGS, loadRaw("settings"));let templates=mergeDefaults(DEFAULT_TEMPLATES, loadRaw("templates"));let currentTemplateKey=null;let calendarEvents=[];init();
+function init(){loadSettingsUI();renderPrices();renderTemplates();renderCalendarEmpty();if(settings.calendarApiUrl)loadCalendarEvents();if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{});}}
+function mergeDefaults(def,saved){if(!saved)return JSON.parse(JSON.stringify(def));const out={};for(const k in def){if(def[k]&&typeof def[k]==='object'&&!Array.isArray(def[k]))out[k]=mergeDefaults(def[k],saved[k]);else out[k]=(saved[k]!==undefined&&saved[k]!==null)?saved[k]:def[k]}for(const k in saved){if(out[k]===undefined)out[k]=saved[k]}return out}
+function openScreen(id,btn){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}
+function openCalendar(){window.open(settings.calendarLink||"https://calendar.google.com/calendar/u/0/r","_blank")}
+function formatCurrency(v){const n=String(v||'').replace(/[^\d]/g,'');return n?('₪'+Number(n).toLocaleString('he-IL')):''}
+function renderPrices(){settings.price300=settings.price300||'2100';settings.price450=settings.price450||'2200';settings.priceSpecial=settings.priceSpecial||'';document.getElementById('home_price_300').value=settings.price300;document.getElementById('home_price_450').value=settings.price450;document.getElementById('home_price_special').value=settings.priceSpecial;document.getElementById('price_300_display').textContent=formatCurrency(settings.price300)||'₪2,100';document.getElementById('price_450_display').textContent=formatCurrency(settings.price450)||'₪2,200';document.getElementById('price_special_display').textContent=formatCurrency(settings.priceSpecial)||'מחיר חריג'}
+function editPrice(key,label){const current=settings[key]||'';const next=prompt(label,current);if(next===null)return;settings[key]=String(next).replace(/[^\d]/g,'');save('settings',settings);renderPrices();toast('המחיר נשמר')}
+function syncDatePicker(){const v=document.getElementById('p_date_picker').value;if(!v)return;const [y,m,d]=v.split('-');document.getElementById('p_date').value=`${d}/${m}/${y}`;}
+function updatePrice(){const guests=Number((val('p_guests')||'').replace(/[^\d]/g,''));const price=document.getElementById('p_price'),hint=document.getElementById('priceHint');if(!guests){hint.textContent="המחיר יופיע לאחר הזנת כמות.";return}if(guests<=300){price.value=settings.price300;hint.textContent=`עד 300 מוזמנים: ${settings.price300} ₪`}else if(guests<=450){price.value=settings.price450;hint.textContent=`300–450 מוזמנים: ${settings.price450} ₪`}else{price.value=settings.priceSpecial;hint.textContent="מעל 450 מוזמנים: מחיר חריג / בדיקה ידנית."}}
+function buildProposal(autoCopy=false){const names=val('p_names')||"________",date=val('p_date')||"________",venue=val('p_venue')||"________",guests=val('p_guests')||"________",price=val('p_price')||"מחיר חריג",hours=`${val('p_start_time')||'19:00'}-${val('p_end_time')||'00:00'}`;const text=`*הצעת מחיר עבור צילום מגנטים*
+
+➖ שמות בעלי האירוע: ${names}
+➖ תאריך: ${date}
+➖ אולם: ${venue}
+➖ כמות מוזמנים: ${guests}
+
+*✔️ מגנטים ללא הגבלה*
+*️⃣ 4 חברים = 4 עותקים, זוג/משפחה = עותק 1, משפחות = לפי מספר עותקים שצריך
+
+✔️ הדפסה טרמית
+
+✔️ 2 אנשי צוות (1 מצלם + 1 חותך)
+
+✔️ שעות עבודה: 5 שעות עבודה, כחצי שעה לפני הגעת המוזמנים
+בדרך כלל ${hours}
+אם יש שעות שונות צריך לעדכן מראש.
+
+*️⃣ צילום אחרון עד 20 דקות לפני שעת הסיום על מנת להספיק לשלוח את המגנטים להדפסה.
+
+✔️ 8 הגדלות בגודל 15×20
+
+✔️ קישור להורדת כל התמונות
+
+✔️ מסגרת בהכנה מראש לאירוע
+
+✔️ *ביטוח עסק*
+
+➖ עמוד מידע מסודר עם דוגמאות, ביקורות ומה כוללת החבילה:
+${settings.examplesLink}
+
+➖ מחיר: *${price} שקלים*
+
+התשלום יתבצע *במזומן / ביט* בתחילת או בסוף שעות העבודה — איך שנוח לכם.
+*לא ניתן לשלם בצ׳ק!!!*
+
+➖ המחיר מתייחס לעבודה בין אשקלון להרצליה כולל בית שמש.
+
+*סגירת התאריך ביומן תתבצע רק לאחר אישור הצעת המחיר על ידי תיוג הצעת המחיר עם הודעה חוזרת:*
+*מאושר*
+
+*️⃣ העמדה של פיתוח המגנטים חייבת להימצא במקום סגור ולא באוויר הפתוח.*
+
+*️⃣ הצעת המחיר תקפה למשך 3 שבועות.*
+
+${settings.businessName}`;document.getElementById('proposalOutput').innerHTML=`<div class="output" id="proposalText">${escapeHtml(text)}</div><div class="row" style="margin-top:8px"><button class="btn wa" onclick="copyElementText('proposalText')">העתק שוב</button><button class="btn soft" onclick="openWhatsAppFromText('proposalText')">פתח בוואטסאפ</button></div>`;if(autoCopy)copyText(text);}
+function renderTemplates(){document.getElementById('templateList').innerHTML=Object.keys(templates).map(key=>`<div class="template-item" onclick="openTemplate('${key}')"><div class="ico">${templates[key].icon||'💬'}</div><div><b>${templates[key].title}</b><span>${templates[key].desc}</span></div></div>`).join('')}
+function openTemplate(key){currentTemplateKey=key;const t=templates[key];document.getElementById('templateEditor').style.display='block';document.getElementById('templateTitle').textContent=(t.icon||'💬')+' '+t.title;document.getElementById('templateText').value=applyVars(t.text);setTimeout(()=>document.getElementById('templateEditor').scrollIntoView({behavior:'smooth'}),80)}
+function saveEditedTemplate(){if(!currentTemplateKey)return;templates[currentTemplateKey].text=document.getElementById('templateText').value;save("templates",templates);toast("נשמר במכשיר");renderTemplates()}
+function copyQuick(key){copyText(applyVars(templates[key].text))}
+function renderCalendarEmpty(){document.getElementById('calendarAlerts').innerHTML='';document.getElementById('weekEvents').innerHTML=settings.calendarApiUrl?'<div class="card"><p>לחץ “רענן יומן” לטעינת אירועים.</p></div>':'<div class="card"><p>עדיין לא הוגדר קישור Apps Script ליומן. אפשר להגדיר אותו במסך הגדרות, או לפתוח את היומן בלחיצה.</p></div>'}
+function loadCalendarEvents(){if(!settings.calendarApiUrl){toast("חסר קישור Apps Script");renderCalendarEmpty();return}document.getElementById('weekEvents').innerHTML='<div class="card"><p>טוען אירועים מהיומן...</p></div>';const cb='calendarCb_'+Date.now();window[cb]=function(data){try{delete window[cb];calendarEvents=(data&&data.events)||[];renderCalendarEvents();}catch(e){renderCalendarError(e.message)}};const s=document.createElement('script');s.src=settings.calendarApiUrl+(settings.calendarApiUrl.includes('?')?'&':'?')+'callback='+cb;s.onerror=()=>renderCalendarError('לא הצלחתי להתחבר לקישור היומן');document.body.appendChild(s);}
+function renderCalendarError(msg){document.getElementById('weekEvents').innerHTML=`<div class="card"><p>שגיאה בטעינת יומן: ${escapeHtml(msg)}</p></div>`}
+function renderCalendarEvents(){const days=Number(settings.framesDaysBefore||4);const today=startDay(new Date());const alerts=calendarEvents.filter(e=>{const d=startDay(new Date(e.start));const send=addDays(d,-days);return send<=today&&d>=today});document.getElementById('calendarAlerts').innerHTML=alerts.length?`<div class="card event-alert"><h2>צריך לשלוח מסגרות</h2>${alerts.map(e=>`<div class="event-item event-alert"><b>${escapeHtml(e.title)}</b><span>אירוע: ${formatDateTime(e.start)} · ${days} ימים לפני</span><button class="btn small orange" style="margin-top:8px" onclick="copyQuick('frames')">העתק הודעת מסגרות</button></div>`).join('')}</div>`:'';document.getElementById('weekEvents').innerHTML=calendarEvents.length?`<div class="card"><h2>אירועי השבוע</h2>${calendarEvents.map(e=>`<div class="event-item"><b>${escapeHtml(e.title)}</b><span>${formatDateTime(e.start)}${e.location?' · '+escapeHtml(e.location):''}</span></div>`).join('')}</div>`:'<div class="card"><p>אין אירועים בשבוע הקרוב.</p></div>'}
+function startDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function formatDateTime(s){const d=new Date(s);return d.toLocaleString('he-IL',{weekday:'short',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}
+function loadSettingsUI(){document.getElementById('s_examples').value=settings.examplesLink;document.getElementById('s_reviews').value=settings.reviewsLink;document.getElementById('s_frames').value=settings.framesLink;document.getElementById('s_business').value=settings.businessName;document.getElementById('s_calendar_link').value=settings.calendarLink;document.getElementById('s_calendar_api').value=settings.calendarApiUrl;document.getElementById('s_frames_days').value=settings.framesDaysBefore;}
+function saveSettings(){settings={examplesLink:val('s_examples')||settings.examplesLink,reviewsLink:val('s_reviews')||settings.reviewsLink,framesLink:val('s_frames')||settings.framesLink,businessName:val('s_business')||settings.businessName,calendarLink:val('s_calendar_link')||"https://calendar.google.com/calendar/u/0/r",calendarApiUrl:val('s_calendar_api'),framesDaysBefore:val('s_frames_days')||"4",price300:settings.price300||"2100",price450:settings.price450||"2200",priceSpecial:settings.priceSpecial||""};save("settings",settings);toast("ההגדרות נשמרו")}
+function installHelp(){alert("כדי לשמור כאפליקציה:\\n\\nבאייפון: פתח בספארי → Share → Add to Home Screen\\n\\nבאנדרואיד: פתח בכרום → שלוש נקודות → Add to Home screen")}
+function applyVars(text){return text.replaceAll("{{framesLink}}",settings.framesLink).replaceAll("{{galleryLink}}","{{קישור גלריה}}")}
+function copyFrom(id){copyText(document.getElementById(id).value)}function copyElementText(id){copyText(document.getElementById(id).innerText)}
+async function copyText(text){try{await navigator.clipboard.writeText(text);toast("ההודעה הועתקה")}catch(e){const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast("ההודעה הועתקה")}}
+function openWhatsAppFromText(id){const text=document.getElementById(id).innerText;window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,'_blank')}
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1600)}
+function val(id){const el=document.getElementById(id);return el?el.value.trim():''}function save(key,val){localStorage.setItem(key,JSON.stringify(val))}function loadRaw(key){try{return JSON.parse(localStorage.getItem(key))}catch(e){return null}}
+function escapeHtml(s){return String(s||"").replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+</script>
+</body>
+</html>
